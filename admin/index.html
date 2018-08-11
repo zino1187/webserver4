@@ -3,57 +3,59 @@
 
 <head>
 <meta charset="UTF-8">
-<title>관리자 로그인</title>
+<title>관리자 모드</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
+body{margin:0px;padding:0px;}
+a{text-decoration:none;}
 .wrapper{
-	width:400px;
-	margin:auto;
-	border-radius:15px;
-	border:2px solid blue;
-	text-align:center;
+	width:100%;
 }
-input{
-	width:95%;
-	margin:5px 0px;
+.header{
+	width:100%;
+	background:yellow;
+	overflow:hidden;
+}
+.header h2{
+	float:left;
+}
+.header div{
+	float:right;
+	padding:20px 20px 20px 0px;
+}
+.nav a{
+	width:25%;
+	display:block;
+	background:#000;
+	color:#fff;
+	float:left;
+	text-align:center;
+	padding:10px 0px;
+}
+.nav a:hover{
+	background:red;
 }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-//유효성 체크를 완료한 데이터에 대해서만 서버측에 보내자!!
-//javascript 정식명칭 : ECMA Script 2015년 이후...문법 추가..
-//   if("2"==2)    ===
-function loginCheck(){
-	if(form1.id.value==""){
-		alert("아이디를 입력하세요");
-		form1.id.focus();
-	}else if(form1.pw.value==""){
-		alert("비밀번호를 입력하세요");
-		form1.pw.focus();
-	}else{
-		form1.action="/login";
-		form1.submit();	
-	}
-}
+
 </script>
 </head>
 <body>
-
 <div class="wrapper">
-	<h2>로그인</h2>
-	<form name="form1" method="post">
-		<div>
-			<input type="text" placeholder="아이디 입력" name="id" maxlength="12">
-		</div>
-		<div>
-			<input type="password" placeholder="비밀번호 입력" name="pw" maxlength="12">
-		</div>
-	</form>
-	<div>
-		<button onClick="loginCheck()">로그인</button>
-		<button>가입</button>
+	<div class="header">
+		<h2>F-Developer</h2>
+		<div>zino님 로그아웃</div>
 	</div>
+	<div class="nav">
+		<a href="#">상품관리</a>
+		<a href="#">고객관리</a>
+		<a href="#">게시판관리</a>
+		<a href="#">상점관리</a>
+	</div>
+	<div class="aside"></div>
+	<div class="section"></div>
+	<div class="footer"></div>
 </div>
-
 </body>
 </html>
