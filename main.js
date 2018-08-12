@@ -7,11 +7,14 @@ var ejs=require("ejs");// 동적 html 생성하는 모듈!!
 								//html 과 섞어 사용사용시<%%>영역은 프로그램
 								//실행영역으로 처리되어, 동적 html 생성...
 var oracledb=require("oracledb");
+oracledb.autoCommit=true; //트랜잭션 자동 커밋!!
 var conn;
 var conStr=require("./lib/conStr.js");
 var session=require("express-session"); //외부모듈
 var multer=require("multer");
 var multiparty=require("multiparty");
+var StringManager=require("./lib/StringManager.js");
+var sm=new StringManager();
 
 var app=express();
 var server=http.createServer(app);//업그레이드 서버!!
@@ -28,12 +31,6 @@ app.use(session({
 	saveUninitialized:true
 })); //세션 설정
 
-//업로드에 대한 설정
-var form=new multiparty.Form({
-	autoFiles:true,
-	uploadDir:__dirname+"/data",  /*파일이 저장될 서버 측 경로*/
-	maxFilesSize:1024*1024*5
-});
 
 
 //서버가 가동되면 오라클을 미리 접속해놓자!!
@@ -102,13 +99,62 @@ app.use("/logout", function(request, response){
 
 //파일업로드 요청 처리 
 app.use("/upload", function(request, response){
+	//업로드에 대한 설정
+	var form=new multiparty.Form({
+		autoFiles:true,
+		uploadDir:__dirname+"/data",  /*파일이 저장될 서버 측 경로*/
+		maxFilesSize:1024*1024*5
+	});
 	
 	//기존의 request 객체를 이용하여 업로드 분석!!
 	form.parse(request, function(error, fields, files){
-		console.log(fields);
+		//console.log(fields.msg[0]); //{msg:"내말"}
+		console.log(sm.getFilename(files.myFile[0].path));
+
+		var msg=fields.msg[0];
+		var filename=sm.getFilename(files.myFile[0].path);
+
+		if(error){
+			console.log(error);
+		}else{
+			var sql="insert into gallery(gallery_id, msg,filename)";
+			sql+=" values(seq_gallery.nextval, :1, :2)";
+
+			conn.execute(sql,[msg,filename], function(err, result){
+				if(err){
+					console.log(err);
+				}else{
+					console.log("등록성공", result);
+					//등록후 지정한 url로 재접속 명령 (브라우저로 하여금..)
+					response.redirect("/gallery/list");
+				}
+			});
+		}
 	});	
 
 });
+
+//파일 목록 보기 요청 
+app.get("/gallery/list", function(request, response){
+	var sql="select * from gallery order by gallery_id desc";
+
+	conn.execute(sql, function(error, result, fields){
+		if(error){
+			console.log(error);
+		}else{
+			console.log(result);
+			//ejs를 렌더링 하면서 결과도 전달
+			fs.readFile("upload/glist.ejs","utf-8", function(err, data){
+				response.writeHead(200,{"Content-Type":"text/html;charset=utf-8"});			
+				response.end(ejs.render(data, {
+					rows:result.rows
+				}));
+			});
+		}
+	});		
+
+});
+
 
 server.listen(8888, function(){
 	console.log("웹서버 8888포트에서 가동중...");

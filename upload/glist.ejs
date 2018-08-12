@@ -1,0 +1,41 @@
+<%="게시물 총 갯수는 "+rows.length%>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+</script>
+</head>
+<body>
+	<table width="80%" align="center" border="1px">
+		<thead>
+			<caption>겔러리</caption>
+			<tr>
+				<th>이미지</th>
+				<th>메세지</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%for(var i=0; i<rows.length;i++){%>
+			<%var obj=rows[i];%>	
+			<tr>
+				<td><img src="/data/<%=obj[2]%>" width="50px"></td>
+				<td><%=obj[1]%></td>
+			</tr>
+			<%}%>
+			<tr>
+				<td colspan="2" align="right">
+					<button onClick="location.href='/upload/send.html';">등록하기</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

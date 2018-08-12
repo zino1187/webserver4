@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>업로드 폼</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.wrapper{
+	width:500px;
+	border:3px solid dodgerblue;
+	border-radius:15px;
+	margin:auto;
+	text-align:center;
+	padding:20px;
+}
+input{
+	width:95%;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+var str="바나나\\오렌지\\딸기.jpg";
+document.write(str.lastIndexOf("\\")); 
+var result=str.substring(str.lastIndexOf("\\")+1, str.length);
+document.write(result);
+
+//string api
+
+function regist(){
+	form1.method="post";	
+	//프로그래밍으로 multipart  를 명시할때는 form1.encoding 이라는것 주의!!
+	form1.encoding="multipart/form-data";
+	form1.action="/upload";	
+	form1.submit();
+}
+</script>
+</head>
+<body>
+
+<div class="wrapper">
+	<form name="form1" method="post" enctype="multipart/form-data">
+		<input type="text" name="msg">
+		<input type="file" name="myFile">
+	</form>
+	<button onclick="regist()">전송</button>
+</div>
+
+</body>
+</html>
